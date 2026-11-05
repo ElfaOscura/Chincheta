@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chincheta</title>
+  <meta name="description" content="Tablero de corcho con post-its, dibujos, imágenes, calendario y alertas.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Chincheta">
+  <meta property="og:description" content="Tablero de corcho con post-its, alertas, dibujos y calendario. Funciona sin internet.">
+  <meta property="og:url" content="https://elfaoscura.github.io/Chincheta/">
+  <meta property="og:image" content="https://elfaoscura.github.io/Chincheta/miniatura-chincheta.jpg">
+  <meta property="og:image:alt" content="Chincheta: tablero de corcho con post-its de colores">
+  <meta property="og:locale" content="es_ES">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Chincheta">
+  <meta name="twitter:description" content="Tablero de corcho con post-its, alertas, dibujos y calendario.">
+  <meta name="twitter:image" content="https://elfaoscura.github.io/Chincheta/miniatura-chincheta.jpg">
+  <meta name="theme-color" content="#4a2f1b">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="top" id="top">
+    <div class="top-body">
+      <div class="strip">
+        <button id="date-btn" class="date-page" type="button" aria-haspopup="dialog">
+          <span class="dp-month" id="dp-month"></span>
+          <span class="dp-day" id="dp-day"></span>
+          <span class="dp-weekday" id="dp-weekday"></span>
+          <span class="visually-hidden">Abrir calendario</span>
+        </button>
+
+        <section class="upcoming" aria-labelledby="up-title">
+          <h2 id="up-title">Eventos siguientes</h2>
+          <div class="up-rows">
+            <ul id="upcoming" class="up-cards up-events"></ul>
+            <ul id="quick" class="up-cards quick-cards"></ul>
+          </div>
+        </section>
+
+        <button id="tools-btn" class="tools-btn" type="button" aria-expanded="false" aria-controls="tools-drawer" aria-label="Menú" title="Menú: buscar, respaldo…">
+          <i data-lucide="menu"></i>
+          <span class="tools-label">Menú</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cajón de herramientas: se desliza hacia abajo sobre el tablero -->
+    <div id="tools-drawer" class="tools-drawer" role="region" aria-label="Menú" hidden>
+      <div class="actions">
+        <div class="search" role="search">
+          <label class="visually-hidden" for="search-input">Buscar en todo el tablero</label>
+          <input id="search-input" class="search-input" type="search" placeholder="Buscar en todo el tablero" autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <i data-lucide="search" class="search-ico"></i>
+          <kbd class="search-key" aria-hidden="true" title="Atajo: / o Ctrl + K">/</kbd>
+          <div id="search-results" class="search-results" hidden></div>
+          <p id="search-status" class="visually-hidden" role="status"></p>
+        </div>
+        <div class="backup" role="group" aria-label="Respaldo e instalación">
+          <button type="button" class="btn ghost" id="export-btn"><i data-lucide="download"></i>Guardar respaldo</button>
+          <button type="button" class="btn ghost" id="import-btn"><i data-lucide="upload"></i>Cargar respaldo</button>
+          <button type="button" class="btn ghost" id="install-btn" hidden><i data-lucide="arrow-down-to-line"></i>Instalar app</button>
+          <input type="file" id="import-file" accept=".json,application/json" hidden>
+        </div>
+        <div class="lang-pick" role="group" aria-label="Idioma">
+          <span class="lang-title">Idioma</span>
+          <button type="button" class="btn ghost" data-lang="es" lang="es" aria-pressed="true">Español</button>
+          <button type="button" class="btn ghost" data-lang="en" lang="en" aria-pressed="false">English</button>
+          <button type="button" class="btn ghost" data-lang="zh" lang="zh" aria-pressed="false">中文</button>
+        </div>
+        <a class="support-link" id="support-link" href="https://ko-fi.com/naidi_art" target="_blank" rel="noopener noreferrer">
+          <i data-lucide="coffee"></i>
+          <span>Invítame un café</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Crear nota: elige el tipo de post-it -->
+    <div id="create-pop" class="tools-drawer create-pop" role="region" aria-label="Crear nota" hidden>
+      <p class="pop-title">¿Qué quieres pegar?</p>
+      <div class="adders" role="group" aria-label="Agregar al tablero">
+        <button type="button" class="adder rosa" data-add="tasks" aria-label="Agregar lista de tareas"><i data-lucide="list-checks"></i>Lista de tareas</button>
+        <button type="button" class="adder amarillo" data-add="note" aria-label="Agregar nota"><i data-lucide="sticky-note"></i>Nota</button>
+        <button type="button" class="adder azul" data-add="links" aria-label="Agregar enlaces"><i data-lucide="link"></i>Enlaces</button>
+        <button type="button" class="adder foto" data-add="image" aria-label="Agregar imagen"><i data-lucide="image"></i>Imagen</button>
+        <button type="button" class="adder menta" data-add="draw" aria-label="Agregar dibujo"><i data-lucide="pencil"></i>Dibujo</button>
+      </div>
+    </div>
+
+    <!-- Alertas: submenú con dos opciones -->
+    <div id="alerts-pop" class="tools-drawer alerts-pop" role="region" aria-label="Alertas" hidden>
+      <button type="button" class="pop-item" id="al-menu-list">
+        <i data-lucide="list"></i>
+        <span><strong>Ver alertas</strong><small id="al-menu-count"></small></span>
+      </button>
+      <button type="button" class="pop-item" id="al-menu-new">
+        <i data-lucide="plus"></i>
+        <span><strong>Crear alerta</strong><small>Título, hora y repetición</small></span>
+      </button>
+    </div>
+
+    <button id="fold-btn" class="fold-tab" type="button" aria-expanded="true" aria-controls="top" title="Ocultar la barra superior">
+      <i data-lucide="chevron-up"></i>
+      <span class="visually-hidden" id="fold-label">Ocultar la barra superior</span>
+    </button>
+  </header>
+
+  <div class="workarea" id="workarea">
+    <main id="board" class="board" aria-label="Tablero de corcho">
+      <div id="empty" class="empty amarillo" hidden>
+        <p class="empty-title">Tu tablero está vacío</p>
+        <p>Pega tu primer post-it con el botón Crear nota, o suelta aquí una imagen.</p>
+      </div>
+      <div id="items" class="items"></div>
+    </main>
+
+    <!-- Nota fijada: panel abierto a la derecha (se llena desde dock.js) -->
+    <aside id="dock" class="dock" aria-label="Nota fijada" hidden>
+      <div id="dock-resize" class="dock-resize" role="separator" aria-orientation="vertical" tabindex="0"
+           aria-label="Cambiar el ancho de la nota fijada" title="Arrastra para cambiar el ancho (doble clic: tamaño original)"></div>
+      <span id="dock-pin" class="dock-pin" aria-hidden="true"></span>
+      <div id="dock-body" class="dock-body"></div>
+    </aside>
+  </div>
+
+  <!-- Post-it abierto (se llena desde app.js) -->
+  <dialog id="item-dialog" class="modal"></dialog>
+
+  <!-- Agregar imagen -->
+  <dialog id="image-dialog" class="modal foto" aria-labelledby="image-dlg-title">
+    <form id="image-form" class="sheet" novalidate>
+      <div class="sheet-top">
+        <h2 id="image-dlg-title" class="dlg-title">Agregar imagen</h2>
+        <button type="button" class="icon-btn close" id="image-close" aria-label="Cerrar">✕</button>
+      </div>
+      <label class="lbl" for="img-file">Imagen guardada en tu PC</label>
+      <input class="field" type="file" id="img-file" accept="image/*">
+      <p class="or" aria-hidden="true">o</p>
+      <label class="lbl" for="img-url">Enlace de una imagen</label>
+      <input class="field" type="text" id="img-url" placeholder="https://…" autocomplete="off">
+      <label class="lbl" for="img-note">Nota (opcional)</label>
+      <textarea class="field" id="img-note" rows="3" maxlength="2000" placeholder="Se verá al abrir la imagen"></textarea>
+      <p class="form-error" id="img-error" role="alert" hidden></p>
+      <div class="sheet-foot">
+        <button type="button" class="btn" id="image-cancel">Cancelar</button>
+        <button type="submit" class="btn primary" id="image-submit">Pegar en el tablero</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Calendario -->
+  <dialog id="cal-dialog" class="modal desk" aria-label="Calendario">
+    <div class="sheet cal-sheet">
+      <div class="cal-binding">
+        <button type="button" class="icon-btn close" id="cal-close" aria-label="Cerrar calendario">✕</button>
+      </div>
+      <div class="cal-layout">
+        <section class="cal-month" aria-label="Mes">
+          <div class="cal-nav">
+            <button type="button" class="btn small" id="cal-prev" aria-label="Mes anterior">‹</button>
+            <h2 id="cal-title" aria-live="polite"></h2>
+            <button type="button" class="btn small" id="cal-next" aria-label="Mes siguiente">›</button>
+            <button type="button" class="btn small" id="cal-today">Hoy</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+        </section>
+        <section class="cal-day" aria-label="Notas del día">
+          <h3 id="day-title"></h3>
+          <ul id="day-events" class="day-events"></ul>
+          <form id="event-form" class="event-form">
+            <h4 id="form-title" class="form-title">Nuevo evento</h4>
+            <fieldset class="type-pick">
+              <legend class="visually-hidden">Tipo de evento</legend>
+              <label class="type-opt t-event">
+                <input type="radio" name="ev-type" value="event" checked>
+                <span><span class="ico" aria-hidden="true">🔔</span> Evento</span>
+              </label>
+              <label class="type-opt t-birthday">
+                <input type="radio" name="ev-type" value="birthday">
+                <span><span class="ico" aria-hidden="true">🎂</span> Cumpleaños</span>
+              </label>
+            </fieldset>
+            <p class="hint" id="ev-type-hint"></p>
+            <label class="lbl" for="ev-date">Fecha</label>
+            <input class="field" id="ev-date" type="date" min="1900-01-01" max="2100-12-31" required>
+            <label class="lbl" for="ev-title">Título</label>
+            <input class="field" id="ev-title" type="text" maxlength="120" placeholder="Ej. Cumpleaños de Ana" required autocomplete="off">
+            <label class="lbl" for="ev-text">Detalles (opcional)</label>
+            <textarea class="field" id="ev-text" rows="2" maxlength="5000"></textarea>
+            <p class="form-error" id="ev-error" role="alert" hidden></p>
+            <div class="row">
+              <button type="submit" class="btn primary" id="ev-save">Guardar evento</button>
+              <button type="button" class="btn" id="ev-cancel" hidden>Cancelar</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Alertas: crear y administrar -->
+  <dialog id="alerts-dialog" class="modal desk" aria-labelledby="alerts-title">
+    <div class="sheet alerts-sheet">
+      <div class="cal-binding">
+        <button type="button" class="icon-btn close" id="alerts-close" aria-label="Cerrar alertas">✕</button>
+      </div>
+      <div class="events-head">
+        <h2 id="alerts-title">Alertas</h2>
+      </div>
+      <div class="al-tabs" role="tablist" aria-label="Alertas">
+        <button type="button" role="tab" class="al-tab" id="al-tab-list" aria-controls="al-view-list" aria-selected="true">
+          <i data-lucide="list"></i><span>Mis alertas</span><span class="al-tab-count" id="al-tab-count"></span>
+        </button>
+        <button type="button" role="tab" class="al-tab" id="al-tab-new" aria-controls="al-view-new" aria-selected="false">
+          <i data-lucide="plus"></i><span id="al-tab-new-label">Crear alerta</span>
+        </button>
+      </div>
+      <div class="alerts-layout">
+        <section class="alerts-col" id="al-view-list" role="tabpanel" aria-labelledby="al-tab-list">
+          <ul id="alerts-list" class="alert-rows"></ul>
+          <div class="alert-prefs">
+            <p id="notif-status" class="hint"></p>
+            <div class="row">
+              <button type="button" class="btn small" id="notif-btn">Activar notificaciones</button>
+              <label class="check"><input type="checkbox" id="sound-toggle"> Sonido</label>
+              <button type="button" class="btn small" id="sound-test">Probar sonido</button>
+            </div>
+          </div>
+        </section>
+        <form id="alert-form" class="alert-form" role="tabpanel" aria-labelledby="al-tab-new" hidden novalidate>
+          <h3 id="alert-form-title" class="form-title">Nueva alerta</h3>
+          <label class="lbl" for="al-title">Título</label>
+          <input class="field" id="al-title" type="text" maxlength="120" placeholder="Ej. Tomar la pastilla" autocomplete="off">
+          <label class="lbl" for="al-text">Descripción (opcional)</label>
+          <textarea class="field" id="al-text" rows="2" maxlength="2000"></textarea>
+          <label class="lbl" for="al-time">Hora</label>
+          <input class="field" id="al-time" type="time">
+          <fieldset class="type-pick repeat-pick">
+            <legend class="lbl">Repetir</legend>
+            <label class="type-opt t-alert"><input type="radio" name="al-mode" value="once" checked><span>Una vez</span></label>
+            <label class="type-opt t-alert"><input type="radio" name="al-mode" value="daily"><span>Todos los días</span></label>
+            <label class="type-opt t-alert"><input type="radio" name="al-mode" value="days"><span>Días de la semana</span></label>
+          </fieldset>
+          <div id="al-date-wrap">
+            <label class="lbl" for="al-date">Fecha</label>
+            <input class="field" id="al-date" type="date" min="1900-01-01" max="2100-12-31">
+          </div>
+          <fieldset id="al-days-wrap" class="day-pick" hidden>
+            <legend class="lbl">Días</legend>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="1"><span title="Lunes">L</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="2"><span title="Martes">M</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="3"><span title="Miércoles">X</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="4"><span title="Jueves">J</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="5"><span title="Viernes">V</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="6"><span title="Sábado">S</span></label>
+            <label class="day-opt"><input type="checkbox" name="al-day" value="0"><span title="Domingo">D</span></label>
+          </fieldset>
+          <p class="form-error" id="al-error" role="alert" hidden></p>
+          <div class="row">
+            <button type="submit" class="btn primary" id="al-save">Crear alerta</button>
+            <button type="button" class="btn" id="al-cancel" hidden>Cancelar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Alerta que se cumple -->
+  <dialog id="alert-dialog" class="modal naranja" aria-labelledby="fire-title">
+    <div class="sheet fire-sheet">
+      <p id="fire-count" class="fire-count" hidden></p>
+      <p class="fire-bell ico" aria-hidden="true">🔔</p>
+      <h2 id="fire-title" class="fire-title"></h2>
+      <p id="fire-text" class="fire-text" hidden></p>
+      <p id="fire-when" class="fire-when"></p>
+      <div class="sheet-foot">
+        <button type="button" class="btn" id="fire-snooze">Prorrogar 10 minutos</button>
+        <button type="button" class="btn primary" id="fire-dismiss">Descartar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Listado de eventos -->
+  <dialog id="events-dialog" class="modal desk" aria-labelledby="events-title">
+    <div class="sheet events-sheet">
+      <div class="cal-binding">
+        <button type="button" class="icon-btn close" id="events-close" aria-label="Cerrar listado">✕</button>
+      </div>
+      <div class="events-head">
+        <h2 id="events-title">Listado de eventos</h2>
+        <button type="button" class="btn primary" id="events-add">Agregar evento</button>
+      </div>
+      <div id="events-body"></div>
+    </div>
+  </dialog>
+
+  <!-- Listado de notas -->
+  <dialog id="notes-dialog" class="modal desk" aria-labelledby="notes-title">
+    <div class="sheet notes-sheet">
+      <div class="cal-binding">
+        <button type="button" class="icon-btn close" id="notes-close" aria-label="Cerrar listado de notas">✕</button>
+      </div>
+      <div class="events-head">
+        <h2 id="notes-title">Listado de notas</h2>
+        <span class="notes-count" id="notes-count"></span>
+      </div>
+      <label class="visually-hidden" for="notes-filter">Filtrar notas</label>
+      <input class="field" id="notes-filter" type="search" placeholder="Filtrar por título o contenido…" autocomplete="off" spellcheck="false">
+      <div class="notes-chips" id="notes-chips" role="group" aria-label="Filtrar por tipo"></div>
+      <ul id="notes-list" class="notes-rows"></ul>
+    </div>
+  </dialog>
+
+  <!-- Confirmación -->
+  <dialog id="confirm-dialog" class="modal confirm" aria-labelledby="confirm-msg">
+    <form method="dialog" class="sheet">
+      <p id="confirm-msg"></p>
+      <div class="sheet-foot">
+        <button class="btn" value="cancel">Cancelar</button>
+        <button class="btn danger-solid" id="confirm-ok" value="ok">Eliminar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <!-- Los módulos van antes de app.js, que es el que arranca todo -->
+  <script src="i18n.js" defer></script>
+  <script src="i18n/es.js" defer></script>
+  <script src="i18n/en.js" defer></script>
+  <script src="i18n/zh.js" defer></script>
+  <script src="lucide.js" defer></script>
+  <script src="links.js" defer></script>
+  <script src="draw.js" defer></script>
+  <script src="search.js" defer></script>
+  <script src="tools.js" defer></script>
+  <script src="dock.js" defer></script>
+  <script src="notes.js" defer></script>
+  <script src="alerts.js" defer></script>
+  <script src="app.js" defer></script>
+</body>
+</html>
