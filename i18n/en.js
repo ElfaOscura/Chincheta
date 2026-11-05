@@ -11,6 +11,7 @@ I18N.dict.en = {
   'common.imageUntitled': 'Untitled image',
   'common.imageNA': 'Image not available',
   'support': 'Buy me a coffee',
+  'repo': 'View the project on GitHub',
   'app.installed': '{app} installed.',
 
   /* Types */

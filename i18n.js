@@ -78,6 +78,7 @@ const STATIC = [
   ['#import-btn', 'backup.load'],
   ['#install-btn', 'backup.install'],
   ['#support-link span', 'support'],
+  ['#repo-link span', 'repo'],
   ['.lang-title', 'lang.label'],
   ['.lang-pick', 'lang.label', 'aria-label'],
   ['#create-pop', 'create.title', 'aria-label'],

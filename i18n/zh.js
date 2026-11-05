@@ -11,6 +11,7 @@ I18N.dict.zh = {
   'common.imageUntitled': '无标题图片',
   'common.imageNA': '图片不可用',
   'support': '请我喝杯咖啡',
+  'repo': '在 GitHub 上查看项目',
   'app.installed': '{app} 已安装。',
 
   /* 类型 */

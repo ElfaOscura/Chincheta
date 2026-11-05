@@ -944,6 +944,11 @@ dialog.desk .sheet.notes-sheet { width: min(38rem, calc(100vw - 1.5rem)); }
 .act-locate { color: #0f766e; }
 .notes-empty { padding: 1.2rem; text-align: center; font: .92rem var(--font-ui); opacity: .7; }
 
+/* Enlace al repositorio (debajo del de Ko-fi) */
+.repo-link { background: rgba(255,255,255,.08); color: #f6e9d8; }
+.repo-link:hover, .repo-link:focus-visible { background: rgba(255,255,255,.2); }
+.repo-link .lu { color: #9ad1ff; }
+
 /* --- Selector de idioma (menú ☰) --- */
 .lang-pick { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
 .lang-title { margin-right: .25rem; color: #f6e9d8; font: 700 .85rem var(--font-ui); }

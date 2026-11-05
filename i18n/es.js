@@ -12,6 +12,7 @@ I18N.dict.es = {
   'common.imageUntitled': 'Imagen sin título',
   'common.imageNA': 'Imagen no disponible',
   'support': 'Invítame un café',
+  'repo': 'Ver el proyecto en GitHub',
   'app.installed': '{app} instalada.',
 
   /* Tipos */
