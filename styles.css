@@ -58,7 +58,7 @@ button { font: inherit; }
 
 /* ---------- Barra superior ---------- */
 .top {
-  position: relative; z-index: 6;
+  position: relative; z-index: 200;
   background:
     repeating-linear-gradient(90deg, rgba(0,0,0,.07) 0 2px, transparent 2px 0.5625rem),
     linear-gradient(180deg, #6b4528, var(--wood));
