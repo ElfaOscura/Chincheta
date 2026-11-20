@@ -17,7 +17,7 @@ Funciona **sin conexión a internet** y se instala como **PWA** en escritorio y 
 ![IndexedDB](https://img.shields.io/badge/IndexedDB-Local_Storage-005A9C?style=for-the-badge)
 ![Lucide Icons](https://img.shields.io/badge/Lucide-Icons-F56565?style=for-the-badge)
 
-*Sin frameworks · Sin dependencias externas · Sin paso de compilación*
+*Publicado directamente con los archivos finales listos para servir (sin proceso de compilación en el servidor/hosting).*
 
 </div>
 
