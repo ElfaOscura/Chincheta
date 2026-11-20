@@ -19,6 +19,12 @@ Funciona **sin conexión a internet** y se instala como **PWA** en escritorio y 
 
 *Publicado directamente con los archivos finales listos para servir (sin proceso de compilación en el servidor/hosting).*
 
+<br>
+
+<img src="screen-tablero.jpg" alt="Tablero de corcho de Chincheta con post-its de colores, eventos próximos en la barra superior y una nota de enlaces fijada en el panel derecho" width="900">
+
+<sub>El tablero con varios post-its, los próximos eventos arriba y una nota fijada en el panel derecho.</sub>
+
 </div>
 
 ---
@@ -56,6 +62,14 @@ Funciona **sin conexión a internet** y se instala como **PWA** en escritorio y 
 * **Interacción táctil y con ratón:** en el tablero se muestran los títulos y las miniaturas; al hacer clic se abre el contenido completo. Puedes arrastrar las notas para moverlas y redimensionarlas desde la esquina inferior derecha en ordenador, móvil o tableta.
 * **Imágenes:** sube imágenes desde tu dispositivo (o arrástralas y suéltalas directamente sobre el tablero) o añádelas desde un enlace. También puedes incluir una imagen junto al título de cualquier post-it.
 * **Dibujo rápido (`💚` verde menta):** lienzo a mano alzada con ratón, dedo o lápiz, con selector de colores, grosores, goma, deshacer (`Ctrl + Z`) y limpiar lienzo.
+
+<div align="center">
+
+| 💛 Nota con imagen | 💚 Dibujo a mano alzada |
+| :---: | :---: |
+| <img src="nota.jpg" alt="Ventana de una nota amarilla con una imagen, un enlace de imagen y texto" height="380"> | <img src="nota-dibujo.jpg" alt="Ventana de un dibujo con paleta de colores, grosores, goma, deshacer y borrar todo" height="380"> |
+
+</div>
 
 ### 📅 Calendario y próximos eventos
 
@@ -147,6 +161,7 @@ Desde el menú `☰` puedes cambiar entre **Español**, **English** y **中文**
 | `sw.js` | Service Worker para caché y funcionamiento sin conexión |
 | `icons/` | Iconos de la aplicación |
 | `miniatura-chincheta.jpg` | Imagen de vista previa al compartir el enlace (Open Graph) |
+| `screen-tablero.jpg`, `nota.jpg`, `nota-dibujo.jpg` | Capturas que se muestran en este README (no las usa la app) |
 
 ---
 
